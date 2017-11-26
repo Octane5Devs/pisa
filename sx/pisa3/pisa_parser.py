@@ -26,7 +26,7 @@ import os
 import os.path
 
 import html5lib
-from html5lib import treebuilders, serializer, treewalkers, inputstream
+from html5lib import treebuilders, serializer, treewalkers
 from xml.dom import Node
 import xml.dom.minidom
 
@@ -599,18 +599,6 @@ def pisaParser(src, c, default_css="", xhtml=False, encoding=None, xml_output=No
             src = src.encode(encoding)
         src = pisaTempFile(src, capacity=c.capacity)    
 
-    # Test for the restrictions of html5lib
-    if encoding:
-        # Workaround for html5lib<0.11.1        
-        if hasattr(inputstream, "isValidEncoding"):
-            if encoding.strip().lower() == "utf8":
-                encoding = "utf-8"
-            if not inputstream.isValidEncoding(encoding):
-                log.error("%r is not a valid encoding e.g. 'utf8' is not valid but 'utf-8' is!", encoding)
-        else:
-             if inputstream.codecName(encoding) is None:
-                 log.error("%r is not a valid encoding", encoding)
-    
     document = parser.parse(
         src,
         encoding=encoding)
